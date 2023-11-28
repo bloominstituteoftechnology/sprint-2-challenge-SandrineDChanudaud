@@ -212,32 +212,29 @@ return object;
       // 🌟 HINT: instead of looping over the number's digits, loop backwards over a template "(XXX) XXX-XXXX"
       // 🌟 HINT: at each iteration, if the current character is an "X", replace it with the result of popping a digit from the number
       // 🌟 HINT: if you'd rather loop forwards, use `shift` instead of `pop`
-      const template = "(XXX) XXX-XXXX";
-  let result = "";
-      
-      if (!/^[0-9]/.test(phoneNumber)) {
+      if (typeof phoneNumber !== "string" || phoneNumber.length !== 10 || !/^\d+$/.test(phoneNumber)) {
     return "type a 10-digit number";
   }
 
-  if (!/^[0-9]+X/.test(phoneNumber)) {
-    return "invalid phone number";
-  
-} else {
-  return phoneNumber;
-}
-  for (let i = template.length - 1; i >= 0; i--) {
-    const currentTemplate = template[i];
+  const template = "(XXX) XXX-XXXX".split("");
 
-    if (currentTemplate === "X") {
-      result = phoneNumber.slice(-1) + result;
-      phoneNumber = phoneNumber.slice(0, -1);
-    } else {
-      result = currentTemplate + result;
+  const digits = phoneNumber.split("");
+
+  for (let i = template.length - 1; i >= 0; i--) {
+    if (template[i] === "X") {
+      template[i] = digits.pop(); 
     }
   }
-    
-    return result;
+
+  if (!/^\d+$/.test(template.join(""))) {
+    return "invalid phone number";
+  }
+
+  return template.join("");
 }
+      
+      
+      
 
     // 👉 CHALLENGE 6 (bonus, NOT graded)
     function diceRolls() {
