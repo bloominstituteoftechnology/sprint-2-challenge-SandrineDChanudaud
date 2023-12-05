@@ -58,7 +58,7 @@
   <form class="widget">
     <p>Type a ten-digit number! (this widget uses the normalizePhoneNumber function)</p>
     <input type="text" id="phoneNumInput" maxlength="10" />
-    <span id="normalized"></span>
+    <span id="normalizePhoneNumber"></span>
   </form>
   <!-- widgets end -->
 
@@ -212,30 +212,37 @@ return object;
       // 🌟 HINT: instead of looping over the number's digits, loop backwards over a template "(XXX) XXX-XXXX"
       // 🌟 HINT: at each iteration, if the current character is an "X", replace it with the result of popping a digit from the number
       // 🌟 HINT: if you'd rather loop forwards, use `shift` instead of `pop`
-      if (typeof phoneNumber !== "string" || phoneNumber.length !== 10 || !/^\d+$/.test(phoneNumber)) {
-    return "type a 10-digit number";
-  }
-
-  const template = "(XXX) XXX-XXXX".split("");
-
-  const digits = phoneNumber.split("");
-
-  for (let i = template.length - 1; i >= 0; i--) {
-    if (template[i] === "X") {
-      template[i] = digits.pop(); 
+        
+      
+    if (typeof phoneNumber !== 'string' || phoneNumber.length !== 10 || !/^\d+$/.test(phoneNumber)) {
+        return "type a 10-digit number";
     }
-  }
+   
+   const template = "(XXX) XXX-XXXX";
+    let formattedNumber = ''; 
 
-  if (!/^\d+$/.test(template.join(""))) {
+            
+    let numPointer = 0;
+
+             
+    for (let i = 0; i < template.length; i++) {
+                
+    if (template[i] === 'X') {
+    formattedNumber += phoneNumber[numPointer]; 
+    numPointer++; 
+     } else {
+    formattedNumber += template[i]; 
+     }
+    }
+         
+    if (numPointer < phoneNumber.length) {
     return "invalid phone number";
+    }
+
+     return formattedNumber;
   }
 
-  return template.join("");
-}
-      
-      
-      
-
+    
     // 👉 CHALLENGE 6 (bonus, NOT graded)
     function diceRolls() {
       // 🧠 diceRolls takes no arguments and returns a number
