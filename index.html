@@ -224,25 +224,36 @@ return object;
             
     let numPointer = 0;
 
-             
     for (let i = 0; i < template.length; i++) {
-                
-    if (template[i] === 'X') {
-    formattedNumber += phoneNumber[numPointer]; 
-    numPointer++; 
-     } else {
-    formattedNumber += template[i]; 
-     }
+        // If the current character is an "X", replace it with the current digit of the number
+        if (template[i] === 'X') {
+            if (!/^[0-9]$/.test(phoneNumber[numPointer])) {
+                return "type a 10-digit number"; // If the character is not a digit, return an error
+            }
+
+            formattedNumber += phoneNumber[numPointer]; // Append the current digit
+            numPointer++; // Move to the next digit
+        } else {
+            formattedNumber += template[i]; // Keep non-"X" characters as they are
+        }
     }
-         
+
+    // Check if there are extra digits in the number
     if (numPointer < phoneNumber.length) {
-    return "invalid phone number";
+        return "type a 10-digit number";
     }
 
-     return formattedNumber;
-  }
+    // Check if there are fewer digits in the number
+    if (numPointer === phoneNumber.length - 1) {
+        return "type a 10-digit number";
+    }
 
-    
+    return formattedNumber;
+}
+     
+  
+ 
+
     // 👉 CHALLENGE 6 (bonus, NOT graded)
     function diceRolls() {
       // 🧠 diceRolls takes no arguments and returns a number
