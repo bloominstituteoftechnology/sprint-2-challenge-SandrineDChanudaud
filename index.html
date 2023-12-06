@@ -85,6 +85,9 @@
       //    * If the profile is active but it has a `reason` prop, return the string "confirm status manually"
       //    * If the profile is **missing** an `active` prop, return the string "impossible to ascertain status"
       // 🌟 HINT: to confirm the existence of a prop, check that its value is not undefined
+     //[[{ active: true }, 'because'], { active: false, reason: 'because' }],
+     //[[{ active: false, reason: 'because' }], { active: true }],
+     
       if (!profile.hasOwnProperty('active')) {
     return "impossible to ascertain status";
   }
@@ -93,15 +96,16 @@
     if (profile.hasOwnProperty('reason')) {
       return "confirm status manually";
     } else {
-      delete profile.reason;
+      profile.active = false;
+      profile.reason = reason;
       return profile;
     }
   } else {
-    if (reason === undefined) {
+    if (profile.reason === undefined) {
       return "confirm status manually";
     } else {
       profile.active = true;
-      profile.reason = reason;
+      delete profile.reason;
       return profile;
     }
   }
@@ -214,8 +218,8 @@ return object;
       // 🌟 HINT: if you'd rather loop forwards, use `shift` instead of `pop`
         
       
-    if (typeof phoneNumber !== 'string' || phoneNumber.length !== 10 || !/^\d+$/.test(phoneNumber)) {
-        return "type a 10-digit number";
+    if (phoneNumber.length !== 10) {
+      return "type a 10-digit number";  
     }
    
    const template = "(XXX) XXX-XXXX";
@@ -225,25 +229,23 @@ return object;
     let numPointer = 0;
 
     for (let i = 0; i < template.length; i++) {
-        // If the current character is an "X", replace it with the current digit of the number
+        
         if (template[i] === 'X') {
             if (!/^[0-9]$/.test(phoneNumber[numPointer])) {
-                return "type a 10-digit number"; // If the character is not a digit, return an error
+                return "invalid phone number"; 
             }
 
-            formattedNumber += phoneNumber[numPointer]; // Append the current digit
-            numPointer++; // Move to the next digit
+            formattedNumber += phoneNumber[numPointer]; 
+            numPointer++; 
         } else {
-            formattedNumber += template[i]; // Keep non-"X" characters as they are
+            formattedNumber += template[i]; 
         }
     }
 
-    // Check if there are extra digits in the number
     if (numPointer < phoneNumber.length) {
         return "type a 10-digit number";
     }
 
-    // Check if there are fewer digits in the number
     if (numPointer === phoneNumber.length - 1) {
         return "type a 10-digit number";
     }
